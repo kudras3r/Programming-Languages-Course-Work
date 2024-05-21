@@ -1,0 +1,6 @@
+.git
+.idea
+/CmakeLists.txt
+tasks.txt
+**/cmake-build-debug/
+**/Storage/
