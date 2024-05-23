@@ -1,11 +1,9 @@
-#include "../headers/Controller.h"
-
-#include "../headers/models/Student.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/Controller.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/models/Student.h"
 
 
 Controller::Controller()
 {
-
 }
 
 void Controller::setConn(DBConnector *conn)
@@ -20,7 +18,6 @@ std::vector<Record>* Controller::getAllGroups()
     unsigned id = 1;
 
     Record tmp;
-
     while (id <= groups_count)
     {
         tmp = this->conn->selectFromById("group", id);
@@ -33,28 +30,29 @@ std::vector<Record>* Controller::getAllGroups()
     return &this->groups_data;
 }
 
-std::vector<Record>* Controller::getStudentsByGroupId(const unsigned& id)
+std::vector<Record>* Controller::getStudentsByGroupId(const unsigned id)
 {
     unsigned groups_count = this->conn->groups_count;
     unsigned students_count = this->conn->students_count;
     unsigned student_id = 1;
-
+    
     Record tmp;
     std::vector<Record> data;
 
     if (id <= groups_count)
     {
-
         while (student_id <= students_count)
         {
             tmp = this->conn->selectFromById("student", student_id);
             Student s = tmp.student_data;
-
-            if (s.group_id == id) data.push_back(tmp);
+            
+            if (s.group_id == id) {
+                
+                data.push_back(tmp);
+            }
 
             student_id++;
         }
-
     }
     else data.clear();
 
@@ -62,7 +60,7 @@ std::vector<Record>* Controller::getStudentsByGroupId(const unsigned& id)
     return &this->students_data;
 }
 
-Group Controller::getGroupById(const unsigned &id)
+Group Controller::getGroupById(const unsigned id)
 {
     Record rec = this->conn->selectFromById("group", id);
     Group g = rec.group_data;
@@ -71,7 +69,7 @@ Group Controller::getGroupById(const unsigned &id)
 }
 
 
-bool Controller::createNewGroup(const std::string& group_name)
+bool Controller::createNewGroup(const std::string group_name)
 {
     if (this->validateName("groups", group_name))
     {
@@ -93,18 +91,43 @@ bool Controller::createNewGroup(const std::string& group_name)
     }
 }
 
+bool Controller::createNewStudent(Student s, const unsigned group_id)
+{
+    // TODO ... validate
+    if (true)
+    {
+        Group g = this->getGroupById(group_id);
+        unsigned s_count = this->conn->students_count;
+        s.id = ++s_count;
+        
+        // TODO ++ members count in group!!!;
 
-bool Controller::validateName(const std::string& table, const std::string& name)
+        Record rec;
+        rec.student_data = s;
+
+        this->conn->insertInto("student", rec);
+
+        return true;
+    }
+    else 
+    {
+        return false;
+    }
+}
+
+
+bool Controller::validateName(const std::string table, const std::string name)
 {
     // TODO Cyrillik letters !! (maybe uppercase)
     if (table == "groups")
     {
         if (
             // check that name looks like LLLL-NN-NN (L-letter; N-number)
-            std::isalpha(name[0]) && std::isalpha(name[1]) && std::isalpha(name[2]) &&
-                std::isalpha(name[3]) &&
-            name[4] == '-' && name[7] == '-' &&
-            std::isdigit(name[5]) && std::isdigit(name[6]) && std::isdigit(name[8]) && std::isdigit(name[9])
+            std::isalpha(name[0]) && std::isalpha(name[1]) 
+            && std::isalpha(name[2]) && std::isalpha(name[3]) 
+            && name[4] == '-' && name[7] == '-' &&
+            std::isdigit(name[5]) && std::isdigit(name[6]) 
+            && std::isdigit(name[8]) && std::isdigit(name[9])
         ) return true;
 
         return false;
@@ -112,4 +135,3 @@ bool Controller::validateName(const std::string& table, const std::string& name)
     }
     return false;
 }
-

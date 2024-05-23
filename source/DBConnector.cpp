@@ -1,46 +1,63 @@
-#include "../headers/DBConnector.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/DBConnector.h"
 
-// TODO
 
 DBConnector::DBConnector()
 {
+    this->path_to_table["group"] = "/home/kud/Projects/ProgLanCoursework/storage/group.txt";
+    this->path_to_table["student"] = "/home/kud/Projects/ProgLanCoursework/storage/student.txt";
+
     this->groups_count = 0;
     this->students_count = 0;
 
     // get groups count
     std::string tmp;
-    this->read_stream.open("../Storage/group.txt");
+    this->read_stream.open(this->path_to_table["group"]);
     while ( std::getline(this->read_stream, tmp) )
         this->groups_count++;
     this->read_stream.close();
 
     // get students count
-    this->read_stream.open("../Storage/student.txt");
+    this->read_stream.open(this->path_to_table["student"]);
     while( std::getline(this->read_stream, tmp) )
         this->students_count++;
     this->read_stream.close();
 }
 
 
-
-
-void DBConnector::insertInto(const std::string &table_name, const Record &rec)
+void DBConnector::insertInto(const std::string table_name, const Record rec)
 {
-
     if (table_name == "group")
     {
-        this->write_stream.open("../Storage/group.txt", std::ios_base::app);
-        this->write_stream << rec.group_data.id << " "
-            << rec.group_data.members_count << " " << rec.group_data.name << " |" << std::endl;
+        this->write_stream.open(this->path_to_table["group"], std::ios_base::app);
+        Group g = rec.group_data;
+        this->write_stream << g.id 
+            << " " << g.members_count << " " << g.name << " |" << std::endl;
         this->write_stream.close();
 
         this->groups_count++;
     }
+    else if (table_name == "student")
+    {
+        this->write_stream.open(this->path_to_table["student"], std::ios_base::app);
+        Student s = rec.student_data;
+        this->write_stream << s.id << " " << s.group_id << " " << s.first_name 
+            << " " << s.middle_name << " " << s.last_name << " " << s.date_of_birth.day 
+            << " " << s.date_of_birth.month << " " << s.date_of_birth.year << " " << s.sex
+            << " " << s.date_of_receipt.day << " " << s.date_of_receipt.month << " " << s.date_of_receipt.year 
+            << " " << s.departament << " " << s.pulpit << " |" << std::endl;
+        this->write_stream.close();
 
+        this->students_count++;
+
+        Group g = this->selectFromById("group", s.group_id).group_data;
+        unsigned m_c = g.members_count;
+        m_c++;
+        std::string val = std::to_string(m_c);  
+    }
 }
 
 
-Record DBConnector::selectFromById(const std::string &table_name, const unsigned id)
+Record DBConnector::selectFromById(const std::string table_name, const unsigned id)
 {
     /*
      * to takin something by id we need to return Record type,
@@ -66,11 +83,50 @@ Record DBConnector::selectFromById(const std::string &table_name, const unsigned
     std::string line;
     std::string delimiter = " ";
 
-    if (table_name == "group")
+    if (table_name == "group") 
+    {
+        table_data = this->parseTable(table_name);
+    }
+    else if (table_name == "student")
+    {
+        table_data = this->parseTable(table_name);        
+    }
+    return table_data[id];
+}
+
+
+std::string DBConnector::recToString(Record rec, std::string rec_type)
+{
+    std::string line;
+
+    if (rec_type == "group")
+    {
+        line.append(std::to_string(rec.group_data.id));
+        line.append(" ");
+        line.append(std::to_string(rec.group_data.members_count));
+        line.append(" ");
+        line.append(rec.group_data.name);
+        line.append(" |");
+        line.append("\n");
+    }
+
+    return line;
+}
+
+
+std::map<int, Record> DBConnector::parseTable(std::string table) 
+{
+    Record rec;
+    std::map<int, Record> table_data;
+
+    std::string line;
+    std::string delimiter = " ";
+
+    if (table == "group")
     {
         Group g;
 
-        this->read_stream.open("../Storage/group.txt");
+        this->read_stream.open(this->path_to_table["group"]);
 
         if (read_stream.is_open())
         {
@@ -98,17 +154,13 @@ Record DBConnector::selectFromById(const std::string &table_name, const unsigned
                 table_data[g.id] = rec;
             }
         }
-
-        this->read_stream.close();
-
-        return table_data[id];
     }
 
-    else if (table_name == "student")
+    else if (table == "student")
     {
         Student s;
 
-        this->read_stream.open("../Storage/student.txt");
+        this->read_stream.open(this->path_to_table["student"]);
 
         if (read_stream.is_open())
         {
@@ -152,19 +204,19 @@ Record DBConnector::selectFromById(const std::string &table_name, const unsigned
                     else if (token_count == 12) s.departament = token;
 
                     else s.pulpit = token;
-
+                    
                     token_count++;
 
                     line.erase(0, pos + delimiter.length());
                 }
                 rec.student_data = s;
+                
                 table_data[s.id] = rec;
             }
-        }
-
-        this->read_stream.close();
-
-        return table_data[id];
+        }   
     }
-}
 
+    this->read_stream.close();
+    
+    return table_data;
+}

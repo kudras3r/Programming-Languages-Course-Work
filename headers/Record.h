@@ -1,7 +1,3 @@
-//
-// Created by kud on 11.05.24.
-//
-
 #ifndef RECORD_H
 #define RECORD_H
 

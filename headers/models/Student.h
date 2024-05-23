@@ -1,9 +1,9 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
-#include "../Libs.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/Libs.h"
 
-#include "Date.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/models/Date.h"
 
 
 struct Student
@@ -16,7 +16,7 @@ struct Student
     std::string middle_name;
     std::string last_name;
     Date date_of_birth;
-    bool sex;  // 1 - man; 0 - wonman
+    bool sex;  // 1 - man; 0 - woman
 
     Date date_of_receipt;
     std::string departament;

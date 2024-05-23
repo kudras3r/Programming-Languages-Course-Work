@@ -1,9 +1,5 @@
-//
-// Created by kud on 08.05.24.
-//
-
-#include "../headers/Application.h"
-#include "../headers/models/Group.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/Application.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/models/Group.h"
 
 
 Application::Application()

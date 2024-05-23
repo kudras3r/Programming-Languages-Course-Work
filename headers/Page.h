@@ -1,7 +1,3 @@
-//
-// Created by kud on 11.05.24.
-//
-
 #ifndef PAGE_H
 #define PAGE_H
 

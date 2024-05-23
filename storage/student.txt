@@ -1,0 +1,6 @@
+1 1 Bulakh Dmitry Evgenievich 17 11 2005 1 01 09 2023 CyberSec IKB-2 |
+2 6 g h e 1 2 3 1 1 2 3 ASD DSA |
+3 3 d s a 1 2 3 1 1 2 3 ASD DSA |
+4 1 gg hh aa 22 33 44 1 1 2 3 ASD DSA |
+5 2 gg h1 h2 43 21 23 1 1 2 3 ASD DSA |
+6 2 jj kk aa 1 23 3 1 1 2 3 ASD DSA |

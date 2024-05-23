@@ -9,5 +9,4 @@ struct Group
     std::string name;
 };
 
-
 #endif //GROUP_H

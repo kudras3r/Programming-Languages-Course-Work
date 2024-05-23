@@ -4,3 +4,4 @@
 tasks.txt
 **/cmake-build-debug/
 **/Storage/
+.vscode/
