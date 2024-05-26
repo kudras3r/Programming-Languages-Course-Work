@@ -1,6 +1,7 @@
-1 1 Bulakh Dmitry Evgenievich 17 11 2005 1 01 09 2023 CyberSec IKB-2 |
-2 6 g h e 1 2 3 1 1 2 3 ASD DSA |
-3 3 d s a 1 2 3 1 1 2 3 ASD DSA |
-4 1 gg hh aa 22 33 44 1 1 2 3 ASD DSA |
-5 2 gg h1 h2 43 21 23 1 1 2 3 ASD DSA |
-6 2 jj kk aa 1 23 3 1 1 2 3 ASD DSA |
+1 1 Ebatel' Dmitry Evgenievich 17 11 2005 1 01 09 2023 CyberSec IKB-2 |
+2 3 Huy Blyadski Eptovich 14 88 2007 0 01 09 2023 CyberSec IKB-2 |
+3 2 Yobik Zalupovich Sosik 12 10 2005 1 01 09 2023 CyberSec IKB-2 |
+4 1 Pizda Nahuy Blya 10 10 2005 1 1 2 3 ASD DSA |
+5 1 HOHOHO Epta Perega 1 1 2000 1 1 2 3 ASD DSA |
+6 1 Hastya Ahuet' Piska 2 3 1819 1 1 2 3 ASD DSA |
+7 4 AHAHA Daun Ebani 1 2 2004 1 1 2 3 ASD DSA |

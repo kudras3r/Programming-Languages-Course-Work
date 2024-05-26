@@ -11,23 +11,35 @@ void Controller::setConn(DBConnector *conn)
     this->conn = conn;
 }
 
-std::vector<Record>* Controller::getAllGroups()
+std::vector<Record>* Controller::getAll(std::string items_name)
 {
-    unsigned groups_count = this->conn->groups_count;
+    unsigned count;
+    std::string table_name;
+    if (items_name == "groups") 
+    {
+        table_name = "group";
+        count = this->conn->groups_count;
+    }
+    else 
+    {
+        table_name = "student";
+        count = this->conn->students_count;
+        std::cout << count;
+    }
     std::vector<Record> data;
     unsigned id = 1;
 
     Record tmp;
-    while (id <= groups_count)
+    while (id <= count)
     {
-        tmp = this->conn->selectFromById("group", id);
+        tmp = this->conn->selectFromById(table_name, id);
         data.push_back(tmp);
 
         id++;
     }
 
-    this->groups_data = data;
-    return &this->groups_data;
+    this->data = data;
+    return &this->data;
 }
 
 std::vector<Record>* Controller::getStudentsByGroupId(const unsigned id)
@@ -60,13 +72,12 @@ std::vector<Record>* Controller::getStudentsByGroupId(const unsigned id)
     return &this->students_data;
 }
 
-Group Controller::getGroupById(const unsigned id)
+Record Controller::getById(std::string item_name, const unsigned id)
 {
-    Record rec = this->conn->selectFromById("group", id);
-    Group g = rec.group_data;
-
-    return g;
+    Record rec = this->conn->selectFromById(item_name, id);
+    return rec;
 }
+
 
 
 bool Controller::createNewGroup(const std::string group_name)
@@ -96,11 +107,9 @@ bool Controller::createNewStudent(Student s, const unsigned group_id)
     // TODO ... validate
     if (true)
     {
-        Group g = this->getGroupById(group_id);
+        Group g = this->getById("group", group_id).group_data;
         unsigned s_count = this->conn->students_count;
         s.id = ++s_count;
-        
-        // TODO ++ members count in group!!!;
 
         Record rec;
         rec.student_data = s;

@@ -6,8 +6,9 @@
 
 
 struct Record
-
 {
+    char type;
+    
     Group group_data;
     Student student_data;
 };

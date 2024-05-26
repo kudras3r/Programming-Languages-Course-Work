@@ -25,11 +25,14 @@ class Controller
             DBConnector* conn
         );  
 
-        std::vector<Record>* getAllGroups();
+        std::vector<Record>* getAll (
+            std::string items_name
+        );
         std::vector<Record>* getStudentsByGroupId (
             const unsigned id
         );
-        Group getGroupById (
+        Record getById (
+            std::string item_name,
             const unsigned id
         );
 
@@ -45,6 +48,8 @@ class Controller
 
     private:
         DBConnector* conn;
+
+        std::vector<Record> data;
 
         std::vector<Record> groups_data;
         std::vector<Record> students_data;

@@ -8,5 +8,6 @@
 #include <cctype>
 #include <fstream>
 #include <stack>
+#include <queue>
 
 #endif //LIBS_H

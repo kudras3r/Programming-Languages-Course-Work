@@ -44,7 +44,7 @@ private:
     void update();  // update frame
     void render();  // draw frame
 
-    void drawLine() const;
+    void drawLine(char c) const;
     bool isId (
         const std::string command
     );  // check user command is id

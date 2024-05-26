@@ -47,50 +47,30 @@ void DBConnector::insertInto(const std::string table_name, const Record rec)
             << " " << s.departament << " " << s.pulpit << " |" << std::endl;
         this->write_stream.close();
 
-        this->students_count++;
 
         Group g = this->selectFromById("group", s.group_id).group_data;
-        unsigned m_c = g.members_count;
-        m_c++;
-        std::string val = std::to_string(m_c);  
+        g.members_count++;
+        
+        Record rec;
+        rec.type = 'g';
+        rec.group_data = g;
+
+        this->update_q.push(rec);
+        
+        this->updateTables();
+
+        this->students_count++;
     }
 }
 
 
 Record DBConnector::selectFromById(const std::string table_name, const unsigned id)
 {
-    /*
-     * to takin something by id we need to return Record type,
-     * cauze user can try to get group such like student,
-     * but there is different models.
-     *
-     * map<int, Record> - structure to temporary storage of table data and fast searching by id.
-     * if user want ot get group, method will create Group g variable and put it to Record.group_data
-     * etc with another models..
-     *
-     * to parse model method:
-     * 1 gets line from file.
-     * 2 split line by 'space' separator into tokens.
-     * 3 convert str id to int.
-     * 4 put all data in model(Group / Student...) variable.
-     *
-     * after this model variable puts into Record.{model_data} and returns to controller
-     */
-
-    std::map<int, Record> table_data;
+    std::map<unsigned, Record> table_data;
     Record rec;
 
-    std::string line;
-    std::string delimiter = " ";
-
-    if (table_name == "group") 
-    {
-        table_data = this->parseTable(table_name);
-    }
-    else if (table_name == "student")
-    {
-        table_data = this->parseTable(table_name);        
-    }
+    table_data = this->parseTable(table_name);
+    
     return table_data[id];
 }
 
@@ -114,10 +94,19 @@ std::string DBConnector::recToString(Record rec, std::string rec_type)
 }
 
 
-std::map<int, Record> DBConnector::parseTable(std::string table) 
+std::map<unsigned, Record> DBConnector::parseTable(std::string table) 
 {
+    /*
+    * return table data :
+    * {
+    *   id : Record
+    *   ...
+    * }
+    */
+
+
     Record rec;
-    std::map<int, Record> table_data;
+    std::map<unsigned, Record> table_data;
 
     std::string line;
     std::string delimiter = " ";
@@ -209,8 +198,11 @@ std::map<int, Record> DBConnector::parseTable(std::string table)
 
                     line.erase(0, pos + delimiter.length());
                 }
-                rec.student_data = s;
                 
+                s.date_of_birth = d_o_b;
+                s.date_of_receipt = d_o_r;
+                
+                rec.student_data = s;
                 table_data[s.id] = rec;
             }
         }   
@@ -219,4 +211,32 @@ std::map<int, Record> DBConnector::parseTable(std::string table)
     this->read_stream.close();
     
     return table_data;
+}
+
+
+void DBConnector::updateTables()
+{
+    while (!this->update_q.empty())
+    {
+        Record rec = this->update_q.front();
+        this->update_q.pop();
+
+        if (rec.type == 'g')
+        {
+            Group g = rec.group_data;
+            unsigned group_id = g.id;
+
+            std::map<unsigned, Record> table_data = this->parseTable("group");
+            
+            table_data[group_id] = rec;
+
+            this->write_stream.open(this->path_to_table["group"]);
+            for (unsigned group_id = 1; group_id <= this->groups_count; group_id++)
+            {   
+                std::string line = this->recToString(table_data[group_id], "group");
+                this->write_stream << line;
+            }
+            this->write_stream.close();
+        }
+    }
 }
