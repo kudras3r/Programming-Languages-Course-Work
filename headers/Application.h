@@ -2,9 +2,10 @@
 #define APPLICATION_H
 
 
-#include "Interface.h"
-#include "Controller.h"
-#include "DBConnector.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/Interface.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/DBConnector.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/Controller.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/PageBuilder.h"
 
 
 class Application
@@ -17,6 +18,7 @@ class Application
     private:
         DBConnector connector;
         Controller controller;
+        PageBuilder page_builder;
         Interface interface;
 
 };

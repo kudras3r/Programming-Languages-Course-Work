@@ -24,7 +24,6 @@ std::vector<Record>* Controller::getAll(std::string items_name)
     {
         table_name = "student";
         count = this->conn->students_count;
-        std::cout << count;
     }
     std::vector<Record> data;
     unsigned id = 1;
@@ -33,13 +32,18 @@ std::vector<Record>* Controller::getAll(std::string items_name)
     while (id <= count)
     {
         tmp = this->conn->selectFromById(table_name, id);
+        if (table_name == "student")
+        {
+            Group g = this->conn->selectFromById("group", tmp.student_data.group_id).group_data;
+            tmp.group_data = g;
+        }
         data.push_back(tmp);
 
         id++;
     }
 
     this->data = data;
-    return &this->data;
+    return &(this->data);
 }
 
 std::vector<Record>* Controller::getStudentsByGroupId(const unsigned id)
@@ -72,12 +76,17 @@ std::vector<Record>* Controller::getStudentsByGroupId(const unsigned id)
     return &this->students_data;
 }
 
+
 Record Controller::getById(std::string item_name, const unsigned id)
 {
     Record rec = this->conn->selectFromById(item_name, id);
+    if (item_name == "student")
+    {
+        Group g = this->conn->selectFromById("group", rec.student_data.group_id).group_data;
+        rec.group_data = g;
+    }
     return rec;
 }
-
 
 
 bool Controller::createNewGroup(const std::string group_name)

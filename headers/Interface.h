@@ -6,9 +6,10 @@
 
 #include "/home/kud/Projects/ProgLanCoursework/headers/Controller.h"
 #include "/home/kud/Projects/ProgLanCoursework/headers/Page.h"
+#include "/home/kud/Projects/ProgLanCoursework/headers/PageBuilder.h"
 
 
-class Interface
+class Interface : public PageBuilder
 {
 
     /* draw the interface:
@@ -22,6 +23,7 @@ class Interface
      */
 
 public:
+    // using PageBuilder::PageBuilder;
     Interface();
     void setController (  // look at Application constructor
         Controller* conn
@@ -39,10 +41,22 @@ private:
 
     short line_size;
 
-    Page cur_page;
+    // Page cur_page;
 
     void update();  // update frame
     void render();  // draw frame
+
+    // void setHomePage();
+    // void setByePage();
+    // void setGroupsPage();
+    // void setGroupPage (
+    //     const unsigned id
+    // );
+    // void setStudentsPage();
+    // void setStudentPage (
+    //     const unsigned id
+    // );
+    // void setGroupCreatingPage();
 
     void drawLine(char c) const;
     bool isId (

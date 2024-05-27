@@ -44,12 +44,12 @@ class Controller
             const unsigned group_id
         );
         
-        
+        std::vector<Record> data;
 
     private:
         DBConnector* conn;
 
-        std::vector<Record> data;
+        // std::vector<Record> data;
 
         std::vector<Record> groups_data;
         std::vector<Record> students_data;
