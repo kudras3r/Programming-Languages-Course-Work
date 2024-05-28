@@ -5,6 +5,12 @@ void PageBuilder::setHomePage()
 {
     this->cur_page.title = "HOME";
     this->cur_page.head = {
+        "           ▄█▌ ▄ ▄ ▐█▄",
+        "           ██▌▀▀▄▀▀▐██",
+        "           ██▌─▄▄▄─▐██",
+        "           ▀██▌▐█▌▐██▀",
+        "        ▄██████ ▀ ██████▄",
+        "",
         "Hello!",
         "You have launched the StudentsDB.",
         "Created by kudras3r.",
@@ -16,6 +22,41 @@ void PageBuilder::setHomePage()
     this->cur_page.invite = {
         "commands : ",
         "help | exit | groups | students"
+    };
+}
+
+
+void PageBuilder::setHelpPage()
+{
+    this->cur_page.title = "HELP";
+    this->cur_page.head = {
+        "StudentsDB is a project,",
+        "designed to simplify the management",
+        "of student data",
+    };
+    this->cur_page.meta = {
+        "You have access to three main partitions:",
+        "students | groups | grades",
+        "",
+        "STUDENTS:",
+        "In this section you can:",
+        "create | edit | delete students",
+        "",
+        "Student model:",
+        "---",
+        "private ID",
+        "private GROUP_ID",
+        "public FIRST | M | L NAMES",
+        "public DATEOFBIRTH",
+        "public SEX",
+        "public DATEOFRECEIPT",
+        "public DEPARTAMENT",
+        "public PULPIT"
+    
+    };
+    this->cur_page.invite = {
+        "back | exit | help",
+        "students | groups"
     };
 }
 
@@ -47,7 +88,8 @@ void PageBuilder::setGroupsPage(std::vector<Record>* data)
 
     this->cur_page.invite = {
         "back | exit | help",
-        "create | delete | {id}"
+        "create | delete | {id}",
+        "students"
     };
 }
 
@@ -80,11 +122,14 @@ void PageBuilder::setGroupPage(const Group* g, std::vector<Record>* data)
             this->cur_page.meta.push_back(line);
         }
     }  
-    else this->cur_page.meta = { "You have not students" };
+    else this->cur_page.meta = { 
+        "You have not students" 
+    };
     
     this->cur_page.invite = {
         "back | exit | help",
-        "create | delete | {id}"
+        "create | delete | {id}",
+        "students | groups"
     };
 }
 
@@ -113,7 +158,8 @@ void PageBuilder::setStudentsPage(std::vector<Record>* data)
 
     this->cur_page.invite = {
         "back | exit | help",
-        "delete | {id}"
+        "delete | edit",
+        "groups"
     };
 }
 
@@ -136,6 +182,12 @@ void PageBuilder::setStudentPage(Record* rec)
     line.append(s.last_name);
 
     this->cur_page.head = {
+        "           ▄██████▄",
+        "          ▐▀▀▀▀▀▀▀▀▌",
+        "          ▌▌▀▀▌▐▀▀▐▐",
+        "          ▐  ▄▄▄▄  ▌",
+        "           ▌▐▌──▐▌▐",
+        "",
         line
     };
     this->cur_page.meta.clear();
@@ -159,46 +211,46 @@ void PageBuilder::setStudentPage(Record* rec)
 
     line = "Pulpit: ";
     line.append(s.pulpit);
-    this->cur_page.meta.push_back(line);   
+    this->cur_page.meta.push_back(line); 
+
+    this->cur_page.invite = {
+        "back | exit | help",
+        "delete | edit",
+        "groups | students"
+    };
 }
 
-// TODO!
 
-// void PageBuilder::setGroupCreatingPage()
-// {
-//     Group new_group;
-//     std::string group_name;
+void PageBuilder::setGroupCreatingPage()
+{
+    this->cur_page.title = "GROUP CREATE";
+    this->cur_page.head = { 
+        "So, lets create a new group" 
+    };
+    this->cur_page.meta = {
+        "Please enter the:"
+    };
+    this->cur_page.invite = {
+        "{group name}"
+    };
+}
 
-//     this->cur_page.title = "GROUP CREATE";
-//     this->cur_page.head = { "So, lets create a new group" };
-//     this->cur_page.meta = {
-//         "Please enter the:"
-//     };
-//     this->cur_page.invite = {
-//         "{group name}"
-//     };
-
-//     // this->render();
-
-//     std::cout << "name> ";
-//     std::cin >> group_name;
-
-//     bool ok_status_code = this->controller->createNewGroup(group_name);
-
-//     if (ok_status_code)
-//     {
-//         this->cur_page.head = { "Nice!" };
-//         this->cur_page.meta = { "New group was created!" };
-//         this->cur_page.invite = {
-//             "groups | exit | help"
-//         };
-//     }
-//     else
-//     {
-//         this->cur_page.head = { "Something went wrong.." };
-//         this->cur_page.meta = { "Name is invalid!" };
-//         this->cur_page.invite = {
-//             "back | exit | help"
-//         };
-//     }
-// }
+void PageBuilder::setResponsePage(bool all_is_good)
+{
+    if (all_is_good)
+    {
+        this->cur_page.head = { "Nice!" };
+        this->cur_page.meta = { "Everything is fine!" };
+        this->cur_page.invite = {
+            "back | exit | help"
+        };
+    }
+    else
+    {
+        this->cur_page.head = { "Something went wrong.." };
+        this->cur_page.meta = { "Check the entered data!" };
+        this->cur_page.invite = {
+            "back | exit | help"
+        };
+    }
+}

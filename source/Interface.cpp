@@ -8,7 +8,7 @@ Interface::Interface() {
 
     this->line_size = 50;
 
-    this->path.push("h");
+    this->path.push("H");
     this->update();
 
 }
@@ -31,7 +31,20 @@ void Interface::runPolling()
         std::cout << "let> ";
         std::cin >> command;
 
-        if (command == "help") this->path.push("h");
+        // path clear 
+        if (this->path.size() >= 10)
+        {
+            std::string last = this->path.top();
+            while (!this->path.empty())
+            {
+                this->path.pop();
+            }
+            this->path.push("H");
+            this->path.push(last);
+        }
+
+        // commands cases
+        if (command == "help" && this->path.top() != "h") this->path.push("h");
 
         else if (command == "exit") this->path.push("e");
 
@@ -40,11 +53,10 @@ void Interface::runPolling()
             this->path.pop();
             if (this->path.top() == "cg-") this->path.pop();
         }
-        
 
-        else if (command == "groups") this->path.push("g-");
+        else if (command == "groups" && this->path.top() != "g-") this->path.push("g-");
 
-        else if (command == "students") this->path.push("s-");
+        else if (command == "students" && this->path.top() != "s-") this->path.push("s-");
 
         else if (command == "create")
         {
@@ -100,6 +112,7 @@ void Interface::runPolling()
 void Interface::update()
 {
     /* event cases */
+
     std::string action = this->path.top();
     char comm = action[0];
     std::stack a = this->path;
@@ -110,9 +123,16 @@ void Interface::update()
         a.pop();
     }
 
-    if (comm == 'h')
+    // home 
+    if (comm == 'H')
     {
         this->setHomePage();
+    }
+
+    // help
+    else if (comm == 'h')
+    {
+        this->setHelpPage();
     }
     
     // exit
@@ -168,51 +188,29 @@ void Interface::update()
         }
     }
 
-    // // create..
-    // else if (comm == 'c')
-    // {
-    //     char first_param = action[1]; 
+    //  create..
+     else if (comm == 'c')
+     {
+        char first_param = action[1]; 
         
-    //     // group;
-    //     if (first_param == 'g')
-    //     {
-    //         Group new_group;
-    //         std::string group_name;
+        // group;
+        if (first_param == 'g')
+        {
+            Group new_group;
+            std::string group_name;
 
-    //         this->cur_page.title = "GROUP CREATE";
-    //         this->cur_page.head = { "So, lets create a new group" };
-    //         this->cur_page.meta = {
-    //             "Please enter the:"
-    //         };
-    //         this->cur_page.invite = {
-    //             "{group name}"
-    //         };
+           this->setGroupCreatingPage();
 
-    //         this->render();
+            this->render();
 
-    //         std::cout << "name> ";
-    //         std::cin >> group_name;
+            std::cout << "name> ";
+            std::cin >> group_name;
 
-    //         bool ok_status_code = this->controller->createNewGroup(group_name);
+            bool status_code = this->controller->createNewGroup(group_name);
 
-    //         if (ok_status_code)
-    //         {
-    //             this->cur_page.head = { "Nice!" };
-    //             this->cur_page.meta = { "New group was created!" };
-    //             this->cur_page.invite = {
-    //                 "groups | exit | help"
-    //             };
-    //         }
-    //         else
-    //         {
-    //             this->cur_page.head = { "Something went wrong.." };
-    //             this->cur_page.meta = { "Name is invalid!" };
-    //             this->cur_page.invite = {
-    //                 "back | exit | help"
-    //             };
-    //         }
-    //     }
-
+            setResponsePage(status_code);
+        }
+    }
     //     // student
     //     else if (first_param == 's')
     //     {

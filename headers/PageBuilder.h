@@ -20,6 +20,7 @@ class PageBuilder
         // );  
 
         void setHomePage();
+        void setHelpPage();
         void setByePage();
         void setGroupsPage(
             std::vector<Record>* data
@@ -35,6 +36,10 @@ class PageBuilder
             Record* rec
         );
         void setGroupCreatingPage();
+
+        void setResponsePage (
+            bool all_is_good 
+        );
 };
 
 #endif //PAGEBUILDER_H
