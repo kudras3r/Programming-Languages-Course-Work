@@ -44,7 +44,7 @@ void DBConnector::insertInto(const std::string table_name, const Record rec)
             << " " << s.middle_name << " " << s.last_name << " " << s.date_of_birth.day 
             << " " << s.date_of_birth.month << " " << s.date_of_birth.year << " " << s.sex
             << " " << s.date_of_receipt.day << " " << s.date_of_receipt.month << " " << s.date_of_receipt.year 
-            << " " << s.departament << " " << s.pulpit << " |" << std::endl;
+            << " " << s.departament << " " << s.pulpit << " " << s.grade_book << " |" << std::endl;
         this->write_stream.close();
 
 
@@ -192,7 +192,9 @@ std::map<unsigned, Record> DBConnector::parseTable(std::string table)
 
                     else if (token_count == 12) s.departament = token;
 
-                    else s.pulpit = token;
+                    else if (token_count == 13) s.pulpit = token;
+
+                    else s.grade_book = token;
                     
                     token_count++;
 

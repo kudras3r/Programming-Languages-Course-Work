@@ -59,9 +59,14 @@ private:
     // void setGroupCreatingPage();
 
     void drawLine(char c) const;
+
     bool isId (
         const std::string command
     );  // check user command is id
+
+    bool isNumber (
+        const std::string s
+    );
 
 };
 

@@ -113,8 +113,10 @@ bool Controller::createNewGroup(const std::string group_name)
 
 bool Controller::createNewStudent(Student s, const unsigned group_id)
 {
-    // TODO ... validate
-    if (true)
+    if (s.date_of_birth.isValid() && s.date_of_receipt.isValid() 
+        && s.namesIsValid()
+        && s.pulIsValid()
+        && s.GBookIsValid())
     {
         Group g = this->getById("group", group_id).group_data;
         unsigned s_count = this->conn->students_count;

@@ -63,10 +63,20 @@ void PageBuilder::setHelpPage()
 
 void PageBuilder::setByePage()
 {
-    this->cur_page.title = "Okey..";
-    this->cur_page.head = { "Bye!" };
-    this->cur_page.meta = { "))" };
-    this->cur_page.invite = { "see u later" };
+    this->cur_page.title = "Have a good time!";
+    this->cur_page.head = { 
+
+        "      █  ██████    ██████  █",
+        "      █ ██    ██  ██    ██ █",
+        "       ███ ██ ██████ ██ ███",
+        "        ██    ██  ██    ██",
+        "         ██████    ██████",
+        
+        "",
+        "Bye!" 
+    };
+    this->cur_page.meta = { "Thanks for your attention!" };
+    this->cur_page.invite = { "See you later :)" };
 }
 
 
@@ -213,6 +223,10 @@ void PageBuilder::setStudentPage(Record* rec)
     line.append(s.pulpit);
     this->cur_page.meta.push_back(line); 
 
+    line = "Grade book: ";
+    line.append(s.grade_book);
+    this->cur_page.meta.push_back(line);
+
     this->cur_page.invite = {
         "back | exit | help",
         "delete | edit",
@@ -234,6 +248,29 @@ void PageBuilder::setGroupCreatingPage()
         "{group name}"
     };
 }
+
+
+void PageBuilder::setStudentCreatingPage()
+{
+
+    this->cur_page.title = "CREATE NEW STUDENT";
+    this->cur_page.head = {
+        "Lets create a new student."
+    };
+    this->cur_page.meta = {
+        "Please enter the :"
+    };
+    this->cur_page.invite = {
+        "FMLnames> {first} {middle} {last}",
+        "DMYofBirth> {day} {month} {year}",
+        "DMYofReceipt> {day} {month} {year}",
+        "Sex> {1} - male or {0} - female",
+        "Departament> {departament} without spaces",
+        "Pulpit> {pulpit} fe : KB-2",
+
+    };
+}
+
 
 void PageBuilder::setResponsePage(bool all_is_good)
 {

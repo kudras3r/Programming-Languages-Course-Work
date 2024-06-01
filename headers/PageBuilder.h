@@ -9,15 +9,7 @@
 class PageBuilder
 {
     public:
-        // Controller* controller;
-        
-        // std::vector<Record>* buffer;
-
         Page cur_page;
-
-        // void setController (  // look at Application constructor
-            // Controller* conn
-        // );  
 
         void setHomePage();
         void setHelpPage();
@@ -36,7 +28,7 @@ class PageBuilder
             Record* rec
         );
         void setGroupCreatingPage();
-
+        void setStudentCreatingPage();
         void setResponsePage (
             bool all_is_good 
         );

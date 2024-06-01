@@ -189,8 +189,8 @@ void Interface::update()
     }
 
     //  create..
-     else if (comm == 'c')
-     {
+    else if (comm == 'c')
+    {
         char first_param = action[1]; 
         
         // group;
@@ -210,99 +210,69 @@ void Interface::update()
 
             setResponsePage(status_code);
         }
-    }
-    //     // student
-    //     else if (first_param == 's')
-    //     {
-    //         char second_param = action[2];
+    
+        // student
+        else if (first_param == 's')
+        {
+            char second_param = action[2];
 
-    //         // in groups with id
-    //         if (second_param != '-')
-    //         {
-    //             unsigned group_id = std::stoi(action.substr(2, action.size()));
+             // in groups with id
+            if (second_param != '-')
+            {
+                unsigned group_id = std::stoi(action.substr(2, action.size()));
                
-    //             Student new_student;
-    //             new_student.group_id = group_id;
+                Student new_student;
+                new_student.group_id = group_id;
 
-    //             this->cur_page.title = "CREATE NEW STUDENT";
-    //             this->cur_page.head = {
-    //                 "Lets create a new student."
-    //             };
-    //             this->cur_page.meta = {
-    //                 "Please enter the :"
-    //             };
-    //             this->cur_page.invite = {
-    //                 "{first} {middle} {last} names"
-    //             };
+                this->setStudentCreatingPage();
 
-    //             this->render();
+                this->render();
 
-    //             std::cout << "FMLnames> ";
-    //             std::cin >> new_student.first_name 
-    //                 >> new_student.middle_name 
-    //                 >> new_student.last_name;
-
-    //             this->cur_page.meta = {
-    //                 "Nice! Now enter the :"
-    //             };
-
-    //             this->cur_page.invite = {
-    //                 "{day} {month} {year}"
-    //             };
-
-    //             this->render();
+                std::cout << "FMLnames> ";
+                std::cin >> new_student.first_name 
+                    >> new_student.middle_name 
+                    >> new_student.last_name;
                 
-    //             std::cout << "DMYofBirth> ";
+                std::string d1, m1, y1, d2, m2, y2, s;
+                
+                std::cout << "DMYofBirth> ";
+                std::cin >> d1 >> m1 >> y1;
 
-    //             Date d;
-    //             std::cin >> d.day >> d.month >> d.year;
+                std::cout << "DMYofReceipt> ";
+                std::cin >> d2 >> m2 >> y2;
+
+                std::cout << "Sex> ";
+                std::cin >> s;
+
+                if (this->isNumber(d1) && this->isNumber(m1) && this->isNumber(y1)
+                    && this->isNumber(d2) && this->isNumber(m2) && this->isNumber(y2)
+                    && (s == "1" || s == "0")) 
+                {
+                    Date d = {std::stoi(d1), std::stoi(m1), std::stoi(y1)};
+                    new_student.date_of_birth = d;
+
+                    d = {std::stoi(d2), std::stoi(m2), std::stoi(y2)};
+                    new_student.date_of_receipt = d;
 
 
-    //             if (d.isValid()) 
-    //             {
-    //                 new_student.date_of_birth = d;
-        
-    //                 new_student.sex = 1;
-    //                 new_student.date_of_receipt.day = 1;
-    //                 new_student.date_of_receipt.month = 2;
-    //                 new_student.date_of_receipt.year = 3;
-    //                 new_student.departament = "ASD";
-    //                 new_student.pulpit = "DSA";
+                    new_student.sex = std::stoi(s);
+                    std::cout << "Departament> ";
+                    std::cin >> new_student.departament;
 
-    //                 // .... TODO
-    //                 bool ok_status_code = this->controller->createNewStudent(new_student, group_id);
-    //                 if (ok_status_code)
-    //                 {
-    //                     this->cur_page.title = "CREATE NEW STUDENT";
-    //                     this->cur_page.head = {
-    //                         "All is good!"
-    //                     };
-    //                     this->cur_page.meta = {
-    //                         "New student was created"
-    //                     };
-    //                     this->cur_page.invite = {
-    //                         "back | exit | help"
-    //                     };
-    //                     this->path.pop();
-    //                 }
-    //             }
-    //             else 
-    //             {
-    //                 this->cur_page.title = "CREATE NEW STUDENT";
-    //                 this->cur_page.head = {
-    //                     "Something went wrong!"
-    //                 };
-    //                 this->cur_page.meta = {
-    //                     "Date of birth is invalid!"
-    //                 };
-    //                 this->cur_page.invite = {
-    //                     "back | exit | help"
-    //                 };
-    //                 this->path.pop();
-    //             }
-    //         }
-    //     }
-    // }
+                    std::cout << "Pulpit> ";
+                    std::cin >> new_student.pulpit;
+
+                    std::cout << "GBook> ";
+                    std::cin >> new_student.grade_book;
+
+                    bool status_code = this->controller->createNewStudent(new_student, group_id);
+
+                    setResponsePage(status_code);
+                }
+                else setResponsePage(0);
+            }
+        }
+    }
 }
 
 
@@ -365,4 +335,12 @@ bool Interface::isId(const std::string command)
     }
 
     return (digits_count == comm_len);
+}
+
+
+bool Interface::isNumber(const std::string s)
+{
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
 }
