@@ -43,13 +43,14 @@ class Controller
             Student s, 
             const unsigned group_id
         );
+
+        unsigned getGroupsCount();
+
         
         std::vector<Record> data;
 
     private:
         DBConnector* conn;
-
-        // std::vector<Record> data;
 
         std::vector<Record> groups_data;
         std::vector<Record> students_data;

@@ -51,7 +51,8 @@ void PageBuilder::setHelpPage()
         "public SEX",
         "public DATEOFRECEIPT",
         "public DEPARTAMENT",
-        "public PULPIT"
+        "public PULPIT",
+        "public GRADEBOOK"
     
     };
     this->cur_page.invite = {
@@ -261,12 +262,15 @@ void PageBuilder::setStudentCreatingPage()
         "Please enter the :"
     };
     this->cur_page.invite = {
+        "! L - letter; N - number !",
+        "",
         "FMLnames> {first} {middle} {last}",
         "DMYofBirth> {day} {month} {year}",
         "DMYofReceipt> {day} {month} {year}",
         "Sex> {1} - male or {0} - female",
         "Departament> {departament} without spaces",
-        "Pulpit> {pulpit} fe : KB-2",
+        "Pulpit> {pulpit} fe : LL-N",
+        "GBook> {GB number} like : NNLNNNN"
 
     };
 }

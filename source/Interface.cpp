@@ -82,27 +82,63 @@ void Interface::runPolling()
             // group id;
             if (this->path.top() == "g-")
             {
-                std::string line = "g";
-                line.append(command);
-                this->path.push(line);
+                unsigned id = std::stoi(command);
+                unsigned groups_count = this->controller->getGroupsCount();
+                
+                if (!(id < 1 || id > groups_count))  
+                {
+                    std::string line = "g";
+                    line.append(command);
+                    this->path.push(line);
+                }
             }
             // student id;
-            else if (this->path.top()[0] == 'g')
+            else if (this->path.top()[0] == 'g' || this->path.top() == "s-")
             {
-                std::string line = "s";
-                line.append(command);
-                this->path.push(line);
+                // validate that input id is in range of group / all students
+                unsigned id = std::stoi(command);
+                
+                if (this->path.top()[0] == 'g') 
+                {                
+                    unsigned group_id = std::stoi(this->path.top().substr(1, this->path.top().size()));
+                    this->buffer = this->controller->getStudentsByGroupId(group_id);
+                }
+                else this->buffer = this->controller->getAll("students");
+                
+                std::set<unsigned> ids;
+
+                for (auto& rec : *this->buffer)
+                {
+                    ids.insert(rec.student_data.id);
+                }
+
+                if (ids.find(id) != ids.end()) 
+                {
+                    std::string line = "s";
+                    line.append(command);
+                    this->path.push(line);
+                }
             }
+             
         }
 
         else if (command == "delete")
         {
             if (this->path.top() == "g-")
             {
-                this->path.push("dg");
+                std::string id;
+                std::cout << "GroupId> ";
+                std::cin >> id;
+                if (this->isId(id))
+                {
+                    std::string line = "dg";
+                    line.append(id);
+                    this->path.push(line);
+                }
             }
             // TODO... 
         }
+
         this->update();
         this->render();
     }
@@ -273,6 +309,8 @@ void Interface::update()
             }
         }
     }
+
+    
 }
 
 

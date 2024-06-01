@@ -72,8 +72,8 @@ std::vector<Record>* Controller::getStudentsByGroupId(const unsigned id)
     }
     else data.clear();
 
-    this->students_data = data;
-    return &this->students_data;
+    this->data = data;
+    return &this->data;
 }
 
 
@@ -134,6 +134,10 @@ bool Controller::createNewStudent(Student s, const unsigned group_id)
         return false;
     }
 }
+
+
+unsigned Controller::getGroupsCount() { return this->conn->groups_count; }
+
 
 
 bool Controller::validateName(const std::string table, const std::string name)

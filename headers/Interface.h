@@ -41,22 +41,9 @@ private:
 
     short line_size;
 
-    // Page cur_page;
 
     void update();  // update frame
     void render();  // draw frame
-
-    // void setHomePage();
-    // void setByePage();
-    // void setGroupsPage();
-    // void setGroupPage (
-    //     const unsigned id
-    // );
-    // void setStudentsPage();
-    // void setStudentPage (
-    //     const unsigned id
-    // );
-    // void setGroupCreatingPage();
 
     void drawLine(char c) const;
 

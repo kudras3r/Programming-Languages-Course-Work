@@ -75,6 +75,8 @@ Record DBConnector::selectFromById(const std::string table_name, const unsigned 
 }
 
 
+
+
 std::string DBConnector::recToString(Record rec, std::string rec_type)
 {
     std::string line;
@@ -228,17 +230,21 @@ void DBConnector::updateTables()
             Group g = rec.group_data;
             unsigned group_id = g.id;
 
-            std::map<unsigned, Record> table_data = this->parseTable("group");
-            
-            table_data[group_id] = rec;
+            if (!rec.deleted) 
+            {
+                std::map<unsigned, Record> table_data = this->parseTable("group");
+                
+                table_data[group_id] = rec;
 
-            this->write_stream.open(this->path_to_table["group"]);
-            for (unsigned group_id = 1; group_id <= this->groups_count; group_id++)
-            {   
-                std::string line = this->recToString(table_data[group_id], "group");
-                this->write_stream << line;
+                this->write_stream.open(this->path_to_table["group"]);
+                for (unsigned g_id = 1; g_id <= this->groups_count; g_id++)
+                {   
+                    std::string line = this->recToString(table_data[g_id], "group");
+                    this->write_stream << line;
+                }
+                this->write_stream.close();
             }
-            this->write_stream.close();
+            
         }
     }
 }
