@@ -14,4 +14,3 @@
 14 8 Hickok Naci Blya 10 10 2000 1 10 10 2000 YobaCode TC-1 14H8811 |
 15 3 Ah Hohohoooo Ah 1 1 2000 0 1 1 2023 Hhh KK-3 11K1111 |
 16 4 Mega Hacker Gg 1 1 2000 0 2 10 2022 Hh LL-1 11K1111 |
-17 9 Irina Bulakh Nikolaevna 10 10 2000 0 1 1 2000 CyberSec KB-2 12H1221 |
