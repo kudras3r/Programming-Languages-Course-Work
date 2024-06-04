@@ -5,9 +5,8 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "/home/kud/Projects/ProgLanCoursework/headers/Libs.h"
 
-#include "/home/kud/Projects/ProgLanCoursework/headers/DBConnector.h"
+#include "DBConnector.h"
 
 
 class Controller
@@ -44,21 +43,21 @@ class Controller
             const unsigned group_id
         );
 
+        bool updateGroup (
+            Group g
+        );
+        bool updateStudent (
+            Student s
+        );
+
         unsigned getGroupsCount();
 
         
-        std::vector<Record> data;
+        // std::vector<Record> data;
 
     private:
         DBConnector* conn;
-
-        std::vector<Record> groups_data;
-        std::vector<Record> students_data;
-
-        bool validateName (
-            const std::string table, 
-            const std::string name
-        );
+        std::vector<Record> data;
 
 };
 

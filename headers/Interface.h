@@ -2,11 +2,10 @@
 #define INTERFACE_H
 
 
-#include "/home/kud/Projects/ProgLanCoursework/headers/Libs.h"
 
-#include "/home/kud/Projects/ProgLanCoursework/headers/Controller.h"
-#include "/home/kud/Projects/ProgLanCoursework/headers/Page.h"
-#include "/home/kud/Projects/ProgLanCoursework/headers/PageBuilder.h"
+#include "Controller.h"
+#include "Page.h"
+#include "PageBuilder.h"
 
 
 class Interface : public PageBuilder

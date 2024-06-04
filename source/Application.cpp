@@ -1,5 +1,5 @@
-#include "/home/kud/Projects/ProgLanCoursework/headers/Application.h"
-#include "/home/kud/Projects/ProgLanCoursework/headers/models/Group.h"
+#include "../headers/Application.h"
+#include "../headers/models/Group.h"
 
 
 Application::Application()

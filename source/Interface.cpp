@@ -1,7 +1,9 @@
-#include "/home/kud/Projects/ProgLanCoursework/headers/Libs.h"
-#include "/home/kud/Projects/ProgLanCoursework/headers/Interface.h"
-#include "/home/kud/Projects/ProgLanCoursework/headers/Page.h"
-#include "/home/kud/Projects/ProgLanCoursework/headers/models/Student.h"
+#include "../headers/Libs.h"
+#include "../headers/Interface.h"
+#include "../headers/Page.h"
+#include "../headers/models/Date.h"
+#include "../headers/models/Student.h"
+#include "../headers/models/Group.h"
 
 
 Interface::Interface() {
@@ -46,7 +48,7 @@ void Interface::runPolling()
         // commands cases
         if (command == "help" && this->path.top() != "h") this->path.push("h");
 
-        else if (command == "exit") this->path.push("e");
+        else if (command == "exit") this->path.push("B");
 
         else if (command == "back" && this->path.size() > 1) 
         {
@@ -76,6 +78,24 @@ void Interface::runPolling()
                 }
             }
         }
+
+        else if (command == "edit")
+        {
+            if (this->path.top()[0] == 'g' && this->path.top()[1] != '-')
+            {
+                std::string line = "eg";
+                std::string g_id = this->path.top().substr(1, this->path.top().size());
+                line.append(g_id);
+                this->path.push(line);
+            }
+            else if (this->path.top()[0] == 's' && this->path.top()[1] != '-')
+            {
+                std::string line = "es";
+                std::string s_id = this->path.top().substr(1, this->path.top().size());
+                line.append(s_id);
+                this->path.push(line);
+            }
+        }
         // user enter id..
         else if (this->isId(command))
         {
@@ -95,7 +115,7 @@ void Interface::runPolling()
             // student id;
             else if (this->path.top()[0] == 'g' || this->path.top() == "s-")
             {
-                // validate that input id is in range of group / all students
+                // validate that input id is in range of groups / all students
                 unsigned id = std::stoi(command);
                 
                 if (this->path.top()[0] == 'g') 
@@ -139,6 +159,8 @@ void Interface::runPolling()
             // TODO... 
         }
 
+        std::cout << "\x1B[2J\x1B[H";
+
         this->update();
         this->render();
     }
@@ -151,7 +173,7 @@ void Interface::update()
 
     std::string action = this->path.top();
     char comm = action[0];
-    std::stack a = this->path;
+    std::stack<std::string> a = this->path;
 
     while (!a.empty())
     {
@@ -171,8 +193,8 @@ void Interface::update()
         this->setHelpPage();
     }
     
-    // exit
-    else if (comm == 'e')
+    // exit (break)
+    else if (comm == 'B')
     {
         this->setByePage();
 
@@ -307,6 +329,106 @@ void Interface::update()
                 }
                 else setResponsePage(0);
             }
+        }
+    }
+
+    // edit..
+    else if (comm = 'e')
+    {
+        char first_param = action[1];
+        // group;
+        if (first_param == 'g')
+        {
+            this->setGroupEditPage();
+            this->render();
+
+            std::cout << "NewName> ";
+            std::string new_name;
+            std::cin >> new_name;
+
+            unsigned g_id = std::stoi(action.substr(2, action.size()));
+            Group edited_group = this->controller->getById("group", g_id).group_data;
+
+            edited_group.name = new_name;
+
+            bool status_code = this->controller->updateGroup(edited_group);
+
+            this->setResponsePage(status_code);
+        }
+        // student;
+        else if (first_param == 's')
+        {
+            this->setStudentEditPage();
+            this->render();
+
+            unsigned s_id = std::stoi(action.substr(2, action.size()));
+            Student edited_student = this->controller->getById("student", s_id).student_data;
+
+            unsigned user_case;
+            std::cout << "Option> ";
+            std::cin >> user_case;
+
+            std::string input;
+            Date d;
+
+            switch (user_case)
+            {
+                case 0:
+                    this->path.pop();
+                
+                case 1:
+                    std::cout << "FName> ";
+                    std::cin >> input;
+                    edited_student.first_name = input;
+                    break;
+                
+                case 2:                    
+                    std::cout << "MName> ";
+                    std::cin >> input;
+                    edited_student.middle_name = input;
+                    break;
+                
+                case 3:                    
+                    std::cout << "LName> ";
+                    std::cin >> input;
+                    edited_student.last_name = input;
+                    break;
+
+                case 4:                    
+                    std::cout << "DMYofBirth> ";
+                    std::cin >> d.day >> d.month >> d.year;
+                    edited_student.date_of_birth = d;
+                    break;
+
+                case 5:                    
+                    std::cout << "Sex> ";
+                    std::cin >> input;
+                    if (input == "1" || input == "0")
+                    {
+                        edited_student.sex = std::stoi(input);
+                    }
+                    else
+                    {
+                        setResponsePage(0);
+                    }
+                    break;
+                // ... TODO
+
+                case 6:
+                    Date d;
+                    std::cout << "DMYofReceipt> ";
+                    std::cin >> d.day >> d.month >> d.year;
+                    edited_student.date_of_receipt = d;
+                    break;
+
+                default:
+                    this->setResponsePage(0);
+                    break;
+            }
+
+            bool status_code = this->controller->updateStudent(edited_student);
+                
+            this->setResponsePage(status_code);
         }
     }
 

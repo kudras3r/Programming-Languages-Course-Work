@@ -1,5 +1,5 @@
-#include "/home/kud/Projects/ProgLanCoursework/headers/Controller.h"
-#include "/home/kud/Projects/ProgLanCoursework/headers/models/Student.h"
+#include "../headers/Controller.h"
+#include "../headers/models/Student.h"
 
 
 Controller::Controller()
@@ -91,10 +91,11 @@ Record Controller::getById(std::string item_name, const unsigned id)
 
 bool Controller::createNewGroup(const std::string group_name)
 {
-    if (this->validateName("groups", group_name))
+    Group g;
+    g.name = group_name;
+
+    if (g.nameIsValid())
     {
-        Group g;
-        g.name = group_name;
         g.members_count = 0;
         g.id = this->conn->groups_count + 1;
 
@@ -104,11 +105,8 @@ bool Controller::createNewGroup(const std::string group_name)
         this->conn->insertInto("group", rec);
 
         return true;
-    }
-    else
-    {
-        return false;
-    }
+    }   
+    return false;
 }
 
 bool Controller::createNewStudent(Student s, const unsigned group_id)
@@ -136,26 +134,39 @@ bool Controller::createNewStudent(Student s, const unsigned group_id)
 }
 
 
-unsigned Controller::getGroupsCount() { return this->conn->groups_count; }
-
-
-
-bool Controller::validateName(const std::string table, const std::string name)
+bool Controller::updateGroup(Group g)
 {
-    // TODO Cyrillik letters !! (maybe uppercase)
-    if (table == "groups")
+    // TODO ! validate g name in g model
+    if (g.nameIsValid())
     {
-        if (
-            // check that name looks like LLLL-NN-NN (L-letter; N-number)
-            std::isalpha(name[0]) && std::isalpha(name[1]) 
-            && std::isalpha(name[2]) && std::isalpha(name[3]) 
-            && name[4] == '-' && name[7] == '-' &&
-            std::isdigit(name[5]) && std::isdigit(name[6]) 
-            && std::isdigit(name[8]) && std::isdigit(name[9])
-        ) return true;
+        Record rec;
+        rec.group_data = g;
+        rec.type = 'g';
+        
+        this->conn->save(rec);
 
-        return false;
-
+        return true;
     }
     return false;
 }
+
+
+bool Controller::updateStudent(Student s)
+{   
+    if (s.date_of_birth.isValid() && s.date_of_receipt.isValid() 
+        && s.namesIsValid()
+        && s.pulIsValid()
+        && s.GBookIsValid())
+    {
+        Record rec;
+        rec.student_data = s;
+        rec.type = 's';
+
+        this->conn->save(rec);
+        return true;
+    }
+    return false;
+}
+
+
+unsigned Controller::getGroupsCount() { return this->conn->groups_count; }

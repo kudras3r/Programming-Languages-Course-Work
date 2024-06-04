@@ -1,4 +1,4 @@
-#include "/home/kud/Projects/ProgLanCoursework/headers/DBConnector.h"
+#include "../headers/DBConnector.h"
 
 
 DBConnector::DBConnector()
@@ -75,20 +75,65 @@ Record DBConnector::selectFromById(const std::string table_name, const unsigned 
 }
 
 
+void DBConnector::save(Record r)
+{
+    this->update_q.push(r);
+
+    this->updateTables();
+}
 
 
-std::string DBConnector::recToString(Record rec, std::string rec_type)
+
+
+std::string DBConnector::recToString(Record rec)
 {
     std::string line;
 
-    if (rec_type == "group")
+    if (rec.type == 'g')
     {
-        line.append(std::to_string(rec.group_data.id));
+        Group g = rec.group_data;
+        line.append(std::to_string(g.id));
         line.append(" ");
-        line.append(std::to_string(rec.group_data.members_count));
+        line.append(std::to_string(g.members_count));
         line.append(" ");
-        line.append(rec.group_data.name);
+        line.append(g.name);
         line.append(" |");
+        line.append("\n");
+    }
+    else if (rec.type == 's')
+    {
+        Student s = rec.student_data;
+        line.append(std::to_string(s.id));
+        line.append(" ");
+        line.append(std::to_string(s.group_id));
+        line.append(" ");
+        line.append(s.first_name);
+        line.append(" ");
+        line.append(s.middle_name);
+        line.append(" ");
+        line.append(s.last_name);
+        line.append(" ");
+        line.append(std::to_string(s.date_of_birth.day));
+        line.append(" ");
+        line.append(std::to_string(s.date_of_birth.month));
+        line.append(" ");
+        line.append(std::to_string(s.date_of_birth.year));
+        line.append(" ");
+        line.append(std::to_string(s.sex));
+        line.append(" ");
+        line.append(std::to_string(s.date_of_receipt.day));
+        line.append(" ");
+        line.append(std::to_string(s.date_of_receipt.month));
+        line.append(" ");
+        line.append(std::to_string(s.date_of_receipt.year));
+        line.append(" ");
+        line.append(s.departament);
+        line.append(" ");
+        line.append(s.pulpit);
+        line.append(" ");
+        line.append(s.grade_book);
+        line.append(" ");
+        line.append("|");
         line.append("\n");
     }
 
@@ -142,6 +187,7 @@ std::map<unsigned, Record> DBConnector::parseTable(std::string table)
                     line.erase(0, pos + delimiter.length());
                 }
                 rec.group_data = g;
+                rec.type = 'g';
                 table_data[g.id] = rec;
             }
         }
@@ -207,6 +253,7 @@ std::map<unsigned, Record> DBConnector::parseTable(std::string table)
                 s.date_of_receipt = d_o_r;
                 
                 rec.student_data = s;
+                rec.type = 's';
                 table_data[s.id] = rec;
             }
         }   
@@ -225,26 +272,36 @@ void DBConnector::updateTables()
         Record rec = this->update_q.front();
         this->update_q.pop();
 
+        unsigned edited_id;
+        std::string table;
+        unsigned counter;
+
         if (rec.type == 'g')
         {
-            Group g = rec.group_data;
-            unsigned group_id = g.id;
+            edited_id = rec.group_data.id;
+            table = "group";
+            counter = this->groups_count;
+        }
+        else if (rec.type = 's')
+        {
+            edited_id = rec.student_data.id;
+            table = "student";
+            counter = this->students_count;
+        }
 
-            if (!rec.deleted) 
-            {
-                std::map<unsigned, Record> table_data = this->parseTable("group");
-                
-                table_data[group_id] = rec;
-
-                this->write_stream.open(this->path_to_table["group"]);
-                for (unsigned g_id = 1; g_id <= this->groups_count; g_id++)
-                {   
-                    std::string line = this->recToString(table_data[g_id], "group");
-                    this->write_stream << line;
-                }
-                this->write_stream.close();
-            }
+        if (!rec.deleted)
+        {
+            std::map<unsigned, Record> table_data = this->parseTable(table);
             
+            table_data[edited_id] = rec;        
+            std::string line;
+            this->write_stream.open(this->path_to_table[table]);
+            for (unsigned id = 1; id <= counter; id++)
+            {
+                line = this->recToString(table_data[id]);
+                this->write_stream << line;
+            }
+            this->write_stream.close();
         }
     }
 }

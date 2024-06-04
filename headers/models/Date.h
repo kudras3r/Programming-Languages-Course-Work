@@ -4,9 +4,9 @@
 
 struct Date
 {
-    unsigned short day;
-    unsigned short month;
-    unsigned short year;
+    int day;
+    int month;
+    int year;
 
     bool isValid()
     {

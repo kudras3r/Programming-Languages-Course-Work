@@ -1,7 +1,6 @@
 #ifndef DBCONNECTOR_H
 #define DBCONNECTOR_H
 
-#include "Libs.h"
 
 #include "Record.h"
 
@@ -34,7 +33,9 @@ class DBConnector
             const unsigned id
         );
 
-
+        void save (
+            Record r
+        );
 
     private:
         std::ofstream write_stream;
@@ -45,8 +46,7 @@ class DBConnector
         std::map<std::string, std::string> path_to_table;  // 
 
         std::string recToString (
-            Record rec, 
-            std::string rec_type
+            Record rec
         );
 
         std::map<unsigned, Record> parseTable (

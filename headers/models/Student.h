@@ -1,9 +1,9 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
-#include "/home/kud/Projects/ProgLanCoursework/headers/Libs.h"
+#include "../Libs.h"
 
-#include "/home/kud/Projects/ProgLanCoursework/headers/models/Date.h"
+#include "Date.h"
 
 
 struct Student

@@ -1,4 +1,4 @@
-#include "/home/kud/Projects/ProgLanCoursework/headers/PageBuilder.h"
+#include "../headers/PageBuilder.h"
 
 
 void PageBuilder::setHomePage()
@@ -52,7 +52,16 @@ void PageBuilder::setHelpPage()
         "public DATEOFRECEIPT",
         "public DEPARTAMENT",
         "public PULPIT",
-        "public GRADEBOOK"
+        "public GRADEBOOK",
+        "",
+        "To CREATE the student go to the group",
+        "to which the student belongs,",
+        "type 'create' and follow the instructions.",
+        "",
+        "To EDIT student info go to this student,",
+        "you can do this by two ways :",
+        "from group | from students page.",
+        "Here you can type 'edit' and change the student info.",
     
     };
     this->cur_page.invite = {
@@ -139,7 +148,7 @@ void PageBuilder::setGroupPage(const Group* g, std::vector<Record>* data)
     
     this->cur_page.invite = {
         "back | exit | help",
-        "create | delete | {id}",
+        "create | delete | edit | {id}",
         "students | groups"
     };
 }
@@ -253,7 +262,6 @@ void PageBuilder::setGroupCreatingPage()
 
 void PageBuilder::setStudentCreatingPage()
 {
-
     this->cur_page.title = "CREATE NEW STUDENT";
     this->cur_page.head = {
         "Lets create a new student."
@@ -262,7 +270,7 @@ void PageBuilder::setStudentCreatingPage()
         "Please enter the :"
     };
     this->cur_page.invite = {
-        "! L - letter; N - number !",
+        "L - letter; N - number",
         "",
         "FMLnames> {first} {middle} {last}",
         "DMYofBirth> {day} {month} {year}",
@@ -272,6 +280,55 @@ void PageBuilder::setStudentCreatingPage()
         "Pulpit> {pulpit} fe : LL-N",
         "GBook> {GB number} like : NNLNNNN"
 
+    };
+}
+
+
+void PageBuilder::setGroupEditPage()
+{
+    this->cur_page.title = "GROUP EDIT";
+    this->cur_page.head = {
+        "Lets edit the group."
+    };
+    this->cur_page.meta = {
+        "Please enter new group name: "
+    };
+    this->cur_page.invite = {
+        "NewName> {group name}"
+    };
+}
+
+
+void PageBuilder::setStudentEditPage()
+{
+    this->cur_page.title = "STUDENT EDIT";
+    this->cur_page.head = {
+        "Lets edit the student."
+    };
+    this->cur_page.meta = {
+        "Please choose the field to edit: "
+    };
+    this->cur_page.invite = {
+        "L - letter; N - number",
+        "",
+        "-name> {name}",
+        "DMYofBirth> {day} {month} {year}",
+        "DMYofReceipt> {day} {month} {year}",
+        "Sex> {1} - male or {0} - female",
+        "Departament> {departament} without spaces",
+        "Pulpit> {pulpit} fe : LL-N",
+        "GBook> {GB number} like : NNLNNNN"
+        "",
+        "{0} - exit",
+        "{1} - f name",
+        "{2} - m name",
+        "{3} - l name",
+        "{4} - date of birth",
+        "{5} - sex",
+        "{6} - date of receipt",
+        "{7} - departament",
+        "{8} - pulpit",
+        "{9} - grade book"
     };
 }
 
