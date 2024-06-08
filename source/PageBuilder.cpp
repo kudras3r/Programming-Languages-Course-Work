@@ -178,7 +178,7 @@ void PageBuilder::setStudentsPage(std::vector<Record>* data)
 
     this->cur_page.invite = {
         "back | exit | help",
-        "delete | edit",
+        "delete | edit | grades",
         "groups"
     };
 }
@@ -239,7 +239,7 @@ void PageBuilder::setStudentPage(Record* rec)
 
     this->cur_page.invite = {
         "back | exit | help",
-        "delete | edit",
+        "delete | edit | grades",
         "groups | students"
     };
 }
@@ -329,6 +329,66 @@ void PageBuilder::setStudentEditPage()
         "{7} - departament",
         "{8} - pulpit",
         "{9} - grade book"
+    };
+}
+
+
+void PageBuilder::setGradesPage(GBook* book, Student* s)
+{
+    std::string line = "GRADES < ";
+    line.append(s->first_name);
+    line.append(" ");
+    line.append(s->middle_name);
+    line.append(" >");
+
+    this->cur_page.title = line;
+    this->cur_page.meta.clear();
+
+    std::vector<unsigned> sems;
+
+    for (const auto& p1 : book->grades)
+    {
+        sems.push_back(p1.first);
+    }
+
+    for (const unsigned& sem : sems)
+    {
+        std::vector<std::string> subjects;
+        line = "Semester ";
+        line.append(std::to_string(sem));
+
+        this->cur_page.meta.push_back(line);
+
+        for (const auto& p2 : book->grades[sem])
+        {
+            subjects.push_back(p2.first);
+        }
+
+        for (const std::string& sub : subjects)
+        {
+            line = "\t";
+            line.append(sub);
+            line.append(" marks : ");
+
+            for (int i = 0; i < book->grades[sem][sub].size(); i++)
+            {
+                if (i != book->grades[sem][sub].size() - 1)
+                {
+                    line.append(std::to_string(book->grades[sem][sub][i]));
+                    line.append(", ");
+                }
+                else line.append(std::to_string(book->grades[sem][sub][i]));
+            }
+
+            this->cur_page.meta.push_back(line);
+        } 
+
+        this->cur_page.meta.push_back("");
+    }
+
+    this->cur_page.invite = {
+        "back | exit | help",
+        "add | delete"
     };
 }
 

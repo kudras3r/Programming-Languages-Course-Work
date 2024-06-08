@@ -3,6 +3,7 @@
 
 #include "models/Group.h"
 #include "models/Student.h"
+#include "models/GBook.h"
 
 
 struct Record
@@ -12,6 +13,7 @@ struct Record
     
     Group group_data;
     Student student_data;
+    GBook grades_data;
 };
 
 #endif //RECORD_H

@@ -9,12 +9,12 @@ class DBConnector
 {
 
     /*
-     * works with files.
-     * responsible for encryption.
-     *
-     * emulated a relational db model:
-     * in 'storage' directory stored 'tables' like student or group..
-     * to work with tables connector uses standart read\write file streams.
+        works with files.
+        responsible for encryption.
+     
+        emulated a relational db model:
+        in 'storage' directory stored 'tables' like student or group..
+        to work with tables connector uses standart read\write file streams.
      */
 
     public:

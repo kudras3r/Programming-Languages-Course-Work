@@ -1,10 +1,13 @@
 #include "../headers/DBConnector.h"
+#include "../headers/models/GBook.h"
+#include "../headers/models/GradesLine.h"
 
 
 DBConnector::DBConnector()
 {
     this->path_to_table["group"] = "/home/kud/Projects/ProgLanCoursework/storage/group.txt";
     this->path_to_table["student"] = "/home/kud/Projects/ProgLanCoursework/storage/student.txt";
+    this->path_to_table["grades"] = "/home/kud/Projects/ProgLanCoursework/storage/grades.txt";
 
     this->groups_count = 0;
     this->students_count = 0;
@@ -257,6 +260,51 @@ std::map<unsigned, Record> DBConnector::parseTable(std::string table)
                 table_data[s.id] = rec;
             }
         }   
+    }
+
+    else if (table == "grades")
+    {
+        GBook book;
+        GradesLine g_line;
+
+        this->read_stream.open(this->path_to_table["grades"]);
+
+        while (getline(read_stream, line))
+        {
+            size_t pos = 0;
+            std::string token;
+            unsigned short token_count = 0;  // positional pointer to model field: 0 for Group - id...
+
+            // spliting lines
+            while ((pos = line.find(delimiter)) != std::string::npos)
+            {
+                token = line.substr(0, pos);
+                // std::cout << token;
+
+                if (token_count <= 2)
+                {
+                    if (token_count == 0) g_line.student_id = std::stoi(token);
+
+                    else if (token_count == 1) g_line.subject = token;
+
+                    else if (token_count == 2) g_line.semester = std::stoi(token);
+                }
+                else
+                {
+                    if (token != "-1") g_line.grades.push_back((token[0] - '0'));
+                }
+
+                token_count++;
+                line.erase(0, pos + delimiter.length());
+            }
+
+            book.grades[g_line.semester][g_line.subject] = g_line.grades;
+            rec.grades_data = book;
+
+            table_data[g_line.student_id] = rec;
+
+            g_line.grades.clear();
+        }
     }
 
     this->read_stream.close();

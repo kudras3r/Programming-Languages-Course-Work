@@ -4,6 +4,7 @@
 #include "../headers/models/Date.h"
 #include "../headers/models/Student.h"
 #include "../headers/models/Group.h"
+#include "../headers/models/GBook.h"
 
 
 Interface::Interface() {
@@ -53,7 +54,8 @@ void Interface::runPolling()
         else if (command == "back" && this->path.size() > 1) 
         {
             this->path.pop();
-            if (this->path.top() == "cg-") this->path.pop();
+            if (this->path.top() == "cg-" || 
+                (this->path.top()[0] == 'c' && this->path.top()[1] == 's')) this->path.pop();
         }
 
         else if (command == "groups" && this->path.top() != "g-") this->path.push("g-");
@@ -157,6 +159,14 @@ void Interface::runPolling()
                 }
             }
             // TODO... 
+        }
+
+        else if (command == "grades" && this->path.top()[0] == 's' && this->path.top()[1] != '-')
+        {
+            std::string s_id = this->path.top().substr(1, this->path.top().size());
+            std::string line = "m";
+            line.append(s_id);
+            this->path.push(line);
         }
 
         std::cout << "\x1B[2J\x1B[H";
@@ -333,7 +343,7 @@ void Interface::update()
     }
 
     // edit..
-    else if (comm = 'e')
+    else if (comm == 'e')
     {
         char first_param = action[1];
         // group;
@@ -364,72 +374,105 @@ void Interface::update()
             unsigned s_id = std::stoi(action.substr(2, action.size()));
             Student edited_student = this->controller->getById("student", s_id).student_data;
 
-            unsigned user_case;
+            char user_case;
             std::cout << "Option> ";
             std::cin >> user_case;
 
             std::string input;
             Date d;
 
-            switch (user_case)
+            if (std::isdigit(user_case)) 
             {
-                case 0:
-                    this->path.pop();
-                
-                case 1:
-                    std::cout << "FName> ";
-                    std::cin >> input;
-                    edited_student.first_name = input;
-                    break;
-                
-                case 2:                    
-                    std::cout << "MName> ";
-                    std::cin >> input;
-                    edited_student.middle_name = input;
-                    break;
-                
-                case 3:                    
-                    std::cout << "LName> ";
-                    std::cin >> input;
-                    edited_student.last_name = input;
-                    break;
+                switch (user_case)
+                {
+                    case '0':
+                        this->path.pop();
+                        break;
+                    
+                    case '1':
+                        std::cout << "FName> ";
+                        std::cin >> input;
+                        edited_student.first_name = input;
+                        break;
+                    
+                    case '2':                    
+                        std::cout << "MName> ";
+                        std::cin >> input;
+                        edited_student.middle_name = input;
+                        break;
+                    
+                    case '3':                    
+                        std::cout << "LName> ";
+                        std::cin >> input;
+                        edited_student.last_name = input;
+                        break;
 
-                case 4:                    
-                    std::cout << "DMYofBirth> ";
-                    std::cin >> d.day >> d.month >> d.year;
-                    edited_student.date_of_birth = d;
-                    break;
+                    case '4':                    
+                        std::cout << "DMYofBirth> ";
+                        std::cin >> d.day >> d.month >> d.year;
+                        edited_student.date_of_birth = d;
+                        break;
 
-                case 5:                    
-                    std::cout << "Sex> ";
-                    std::cin >> input;
-                    if (input == "1" || input == "0")
-                    {
-                        edited_student.sex = std::stoi(input);
-                    }
-                    else
-                    {
-                        setResponsePage(0);
-                    }
-                    break;
-                // ... TODO
+                    case '5':                    
+                        std::cout << "Sex> ";
+                        std::cin >> input;
+                        if (input == "1" || input == "0")
+                        {
+                            edited_student.sex = std::stoi(input);
+                        }
+                        else
+                        {
+                            setResponsePage(0);
+                        }
+                        break;
 
-                case 6:
-                    Date d;
-                    std::cout << "DMYofReceipt> ";
-                    std::cin >> d.day >> d.month >> d.year;
-                    edited_student.date_of_receipt = d;
-                    break;
+                    case '6':
+                        Date d;
+                        std::cout << "DMYofReceipt> ";
+                        std::cin >> d.day >> d.month >> d.year;
+                        edited_student.date_of_receipt = d;
+                        break;
+                    
+                    case '7':
+                        std::cout << "Departament> ";
+                        std::cin >> input;
+                        edited_student.departament = input;
+                        break;
 
-                default:
-                    this->setResponsePage(0);
-                    break;
+                    case '8':
+                        std::cout << "Pulpit> ";
+                        std::cin >> input;
+                        edited_student.pulpit = input;
+                        break;
+
+                    case '9':
+                        std::cout << "GBook> ";
+                        std::cin >> input;
+                        edited_student.grade_book = input;
+                        break;
+
+                    default:
+                        this->setResponsePage(0);
+                        this->path.pop();
+                        break;
+                }
             }
 
             bool status_code = this->controller->updateStudent(edited_student);
                 
             this->setResponsePage(status_code);
         }
+    }
+    
+    // grades;
+    else if (comm == 'm')
+    {
+        unsigned student_id = std::stoi(action.substr(1, action.size()));
+        
+        GBook student_gbook = this->controller->getById("grades", student_id).grades_data; 
+        Student s = this->controller->getById("student", student_id).student_data;
+
+        this->setGradesPage(&student_gbook, &s);
     }
 
     

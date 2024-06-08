@@ -4,6 +4,9 @@
 #include "Page.h"
 #include "Controller.h"
 #include "Record.h"
+#include "models/GBook.h"
+#include "models/Student.h"
+
 
 class PageBuilder
 {
@@ -34,6 +37,11 @@ class PageBuilder
 
         void setGroupEditPage();
         void setStudentEditPage();
+
+        void setGradesPage (
+            GBook* book,
+            Student* s
+        );
 
         void setResponsePage (
             bool all_is_good 
