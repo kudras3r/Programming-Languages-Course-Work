@@ -158,6 +158,14 @@ void Interface::runPolling()
                     this->path.push(line);
                 }
             }
+            else if (this->path.top()[0] == 's' && this->path.top()[1] != '-')
+            {
+                unsigned s_id = std::stoi(this->path.top().substr(1, this->path.top().size()));
+                std::string line = "ds";
+                line.append(std::to_string(s_id));
+
+                this->path.push(line); 
+            }
             // TODO... 
         }
 
@@ -166,6 +174,15 @@ void Interface::runPolling()
             std::string s_id = this->path.top().substr(1, this->path.top().size());
             std::string line = "m";
             line.append(s_id);
+            this->path.push(line);
+        }
+
+        else if (command == "sort" && this->path.top()[0] == 'g' && this->path.top()[1] != '-')
+        {
+            std::string line = "t"; // task
+            std::string g_id = this->path.top().substr(1, this->path.top().size());
+            line.append(g_id);
+
             this->path.push(line);
         }
 
@@ -475,6 +492,42 @@ void Interface::update()
         this->setGradesPage(&student_gbook, &s);
     }
 
+    // delete..
+    else if (comm == 'd')
+    {
+        if (action[1] == 's')
+        {
+            this->setStudentDeletePage();
+        }
+    }
+
+    // individual task : sort group
+    else if (comm == 't')
+    {
+        unsigned group_id = std::stoi(action.substr(1, action.size()));
+        
+        std::vector<unsigned> sems;
+        std::vector<Student> group;
+        unsigned count; 
+        unsigned sem;
+        
+        this->render();
+
+        std::cout << "semsCount> ";
+        std::cin >> count;
+
+        std::cout << "sems> ";
+        for (int i = 0; i < count; i++)
+        {
+            std::cin >> sem;
+            sems.push_back(sem);
+        }
+        
+        group = this->controller->getSortedGroupBySems(group_id, sems);
+
+        this->setSortedGroupPage(&group, &sems);
+        
+    }
     
 }
 

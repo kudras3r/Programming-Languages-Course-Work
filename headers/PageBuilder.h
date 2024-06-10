@@ -24,6 +24,11 @@ class PageBuilder
             std::vector<Record>* data
         );
 
+        void setSortedGroupPage (
+            std::vector<Student>* data,
+            std::vector<unsigned>* sems
+        );
+
         void setGroupPage (
             const Group* g,
             std::vector<Record>* data
@@ -37,6 +42,8 @@ class PageBuilder
 
         void setGroupEditPage();
         void setStudentEditPage();
+
+        void setStudentDeletePage();
 
         void setGradesPage (
             GBook* book,

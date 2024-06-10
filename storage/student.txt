@@ -1,1 +1,7 @@
 1 1 John Doe Alisson 10 10 2004 1 1 9 2023 Math MT-1 12F2134 |
+2 1 Aleksey Civilization Master 1 1 2005 1 1 9 2023 CyberSec KB-1 12D2134 |
+3 1 Straustrup Ivanov Ivanovich 10 10 2004 1 1 9 2023 CyberSec KB-2 12K2354 |
+4 1 Tanenbaum Petr Sergeevich 10 10 2005 1 1 9 2023 CyberSec KB-2 16H8291 |
+5 1 Lovecraft Govard Philips 10 8 2004 1 1 9 2023 CyberSec KB-2 54S1231 |
+6 1 Turing Alan Ivanovich 10 10 2005 1 1 9 2023 CyberSec KB-2 51K9982 |
+7 1 Straustrup Bierne Alekseevich 10 10 2004 1 1 9 2023 CyberSec KB-2 11K1231 |

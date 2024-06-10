@@ -279,7 +279,6 @@ std::map<unsigned, Record> DBConnector::parseTable(std::string table)
             while ((pos = line.find(delimiter)) != std::string::npos)
             {
                 token = line.substr(0, pos);
-                // std::cout << token;
 
                 if (token_count <= 2)
                 {

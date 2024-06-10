@@ -24,6 +24,7 @@ class Interface : public PageBuilder
 public:
     // using PageBuilder::PageBuilder;
     Interface();
+    
     void setController (  // look at Application constructor
         Controller* conn
     );  

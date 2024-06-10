@@ -35,6 +35,11 @@ void PageBuilder::setHelpPage()
         "of student data",
     };
     this->cur_page.meta = {
+        "Main information to application using:",
+        "Application works with you with commands",
+        "All commands that you have access now",
+        "storage in the bottom of page.",
+        ""
         "You have access to three main partitions:",
         "students | groups | grades",
         "",
@@ -62,6 +67,10 @@ void PageBuilder::setHelpPage()
         "you can do this by two ways :",
         "from group | from students page.",
         "Here you can type 'edit' and change the student info.",
+        "",
+        "To DELETE student go to his page and run delete command."
+        "",
+        "All of this knowlages you can use in groups and grades partions."
     
     };
     this->cur_page.invite = {
@@ -149,7 +158,46 @@ void PageBuilder::setGroupPage(const Group* g, std::vector<Record>* data)
     this->cur_page.invite = {
         "back | exit | help",
         "create | delete | edit | {id}",
-        "students | groups"
+        "students | groups",
+        "",
+        "(individual task) sort"
+    };
+}
+
+
+void PageBuilder::setSortedGroupPage(std::vector<Student>* students, std::vector<unsigned>* sems)
+{
+    this->cur_page.title = "SORTED GROUP (var 82)";
+
+    std::string line = "Sorted by ";
+    for (const unsigned& s : *sems) 
+    {
+        line.append(std::to_string(s));
+        line.append(" ");
+    }
+    line.append("semesters");
+    this->cur_page.head = {
+        line
+    };
+    this->cur_page.meta.clear();
+
+    for (Student& s : *students)
+    {
+        line = std::to_string(s.id);
+        line.append(") ");
+        line.append(s.first_name);
+        line.append(" ");
+        line.append(s.middle_name);
+        line.append(" <");
+        line.append(s.date_of_birth.likeStr());
+        line.append("> ");
+
+        this->cur_page.meta.push_back(line);    
+    }
+
+    this->cur_page.invite = {
+        "help | back | exit",
+        "groups | students"
     };
 }
 
@@ -329,6 +377,18 @@ void PageBuilder::setStudentEditPage()
         "{7} - departament",
         "{8} - pulpit",
         "{9} - grade book"
+    };
+}
+
+
+void PageBuilder::setStudentDeletePage()
+{
+    this->cur_page.title = "STUDENT DELETE";
+    this->cur_page.head = { "Delete student John Doe." };
+    this->cur_page.meta = { "Student were succefuly deleted!" };
+    this->cur_page.invite = { 
+        "back | help | exit",
+        "students | groups"
     };
 }
 

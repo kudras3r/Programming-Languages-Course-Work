@@ -24,6 +24,13 @@ class Controller
             DBConnector* conn
         );  
 
+
+        std::vector<Student> getSortedGroupBySems (
+            const unsigned g_id,
+            const std::vector<unsigned> sems
+        );
+
+
         std::vector<Record>* getAll (
             std::string items_name
         );
@@ -52,7 +59,10 @@ class Controller
 
         unsigned getGroupsCount();
 
-        
+        void shakerSort (
+            std::vector<Student>& students,
+            std::vector<double>& marks
+        );
         // std::vector<Record> data;
 
     private:
